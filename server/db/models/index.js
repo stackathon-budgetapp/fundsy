@@ -6,5 +6,6 @@ User.hasMany(Account)
 
 module.exports = {
     User,
-    Account
+    Account,
+    Transaction
 }
