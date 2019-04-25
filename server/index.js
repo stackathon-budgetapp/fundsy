@@ -1,4 +1,5 @@
 const path = require('path')
+const db = require('./db')
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
@@ -28,8 +29,12 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500).send(err.message || 'Internal server error.')
   })
 
+
+db.sync()
+
 const port = process.env.PORT || 3000
 
 app.listen(port, function() {
   console.log(`listening on port ${port}`)
 })
+
