@@ -1,5 +1,5 @@
 const plaid = require('plaid')
-const {PLAID_SECRET, PLAID_CLIENT_ID} = require('../../secrets')
+const {PLAID_SECRET, PLAID_CLIENT_ID, ngrok_address} = require('../../secrets')
 const PLAID_PUBLIC_KEY = '65546042f77b1fd26dea9589eeddf7'
 const moment = require('moment')
 const router = require('express').Router()
