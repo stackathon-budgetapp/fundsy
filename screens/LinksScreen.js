@@ -5,7 +5,7 @@ import PlaidAuthenticator from 'react-native-plaid-link';
 import axios from 'axios'
 import {ngrok_address} from '../secrets'
 
-export default class LinksScreen extends React.Component {
+class DisconnectedLinksScreen extends React.Component {
   constructor() {
     super() 
 
@@ -16,7 +16,7 @@ export default class LinksScreen extends React.Component {
   };
 
     render() {
-      console.log(this.props)
+      console.log('link', this.props)
       return <PlaidAuthenticator
         onMessage={this.onMessage}
         publicKey="65546042f77b1fd26dea9589eeddf7"
@@ -35,4 +35,10 @@ export default class LinksScreen extends React.Component {
       this.setState({data})
     }
 }
+
+const mapStateToProps = (state) => {
+  return ({user: state.user})
+}
+
+export default connect(mapStateToProps)(DisconnectedLinksScreen)
 

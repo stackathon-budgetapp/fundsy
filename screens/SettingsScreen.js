@@ -3,7 +3,7 @@ import { AppRegistry, Text, TextInput, View, Button } from 'react-native';
 import axios from 'axios'
 import {ngrok_address} from '../secrets'
 
-export default class SettingsScreen extends React.Component {
+class DisconnectedSettingsScreen extends React.Component {
   constructor(props) {
     super()
     this.state = {
@@ -17,7 +17,7 @@ export default class SettingsScreen extends React.Component {
   };
 
   render() {
-    console.log(this.props)
+    console.log('settings', this.props)
     /* Go ahead and delete ExpoConfigView and replace it with your
      * content, we just wanted to give you a quick view of your config */
     return (
@@ -51,3 +51,10 @@ export default class SettingsScreen extends React.Component {
     
   }
 }
+
+
+const mapStateToProps = (state) => {
+  return ({user: state.user})
+}
+
+export default connect(mapStateToProps)(DisconnectedSettingsScreen)
