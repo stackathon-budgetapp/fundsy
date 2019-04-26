@@ -16,6 +16,7 @@ export default class LinksScreen extends React.Component {
   };
 
     render() {
+      console.log(this.props)
       return <PlaidAuthenticator
         onMessage={this.onMessage}
         publicKey="65546042f77b1fd26dea9589eeddf7"
