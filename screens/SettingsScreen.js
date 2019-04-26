@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { AppRegistry, Text, TextInput, View, Button } from 'react-native';
+import axios from 'axios'
+import {ngrok_address} from '../secrets'
 
 export default class SettingsScreen extends React.Component {
   constructor(props) {
@@ -13,12 +15,6 @@ export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: 'app.json',
   };
-
-
-  onPressSubmit = () => {
-    console.log(this.state)
-
-  }
 
   render() {
     /* Go ahead and delete ExpoConfigView and replace it with your
@@ -42,5 +38,15 @@ export default class SettingsScreen extends React.Component {
           />
       </View>
     )
+  }
+  async onPressSubmit() {
+    console.log(this.state)
+    try {
+      await axios.post(`${ngrok_address}/auth/signup`, this.state)
+    }
+    catch(err) {
+      console.log(err)
+    }
+    
   }
 }

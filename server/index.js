@@ -14,10 +14,6 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-console.log('BEFORE PLAID!')
-app.use('/plaid', require('./plaid'))
-console.log('/AFTER PLAID!')
-
 
 passport.serializeUser((user, done) => done(null, user.id))
 
@@ -32,6 +28,7 @@ passport.deserializeUser(async (id, done) => {
 
 app.use(passport.initialize())
 app.use('/auth', require('./auth'))
+app.use('/plaid', require('./plaid'))
 
 app.get('/', (req, res, next) => {
   res.send('HELLO!')
