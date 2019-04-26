@@ -16,7 +16,6 @@ const client = new plaid.Client(PLAID_CLIENT_ID, PLAID_SECRET,
 
 
 router.post('/get_access_token', function(request, response, next) {
-    console.log('REQ.BODY! ',request.body)
   PUBLIC_TOKEN = request.body.public_token;
   client.exchangePublicToken(PUBLIC_TOKEN, function(error, 
 tokenResponse) {
