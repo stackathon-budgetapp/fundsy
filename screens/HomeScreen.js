@@ -12,7 +12,11 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super()
+  }
   static navigationOptions = {
     header: null,
   };
@@ -97,6 +101,8 @@ export default class HomeScreen extends React.Component {
     );
   };
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

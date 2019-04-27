@@ -3,9 +3,7 @@ const db = require('./db')
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-// const passport = require('passport')
-// const session = require('express-session')
-// const db = require('./db/db')
+const passport = require('passport')
 // const SequelizeStore = require('connect-session-sequelize')(session.Store);
 // const dbStore = new SequelizeStore({ db: db });
 
@@ -16,9 +14,21 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-console.log('BEFORE PLAID!')
+
+passport.serializeUser((user, done) => done(null, user.id))
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findByPk(id)
+    done(null, user)
+  } catch (err) {
+    done(err)
+  }
+})
+
+app.use(passport.initialize())
+app.use('/auth', require('./auth'))
 app.use('/plaid', require('./plaid'))
-console.log('/AFTER PLAID!')
 
 app.get('/', (req, res, next) => {
   res.send('HELLO!')

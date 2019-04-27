@@ -1,7 +1,17 @@
-import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import React, {Component} from 'react';
+import { AppRegistry, Text, TextInput, View, Button } from 'react-native';
+import axios from 'axios'
+import {ngrok_address} from '../secrets'
 
 export default class SettingsScreen extends React.Component {
+  constructor(props) {
+    super()
+    this.state = {
+      username: '',
+      password: ''
+    }
+    this.onPressSubmit = this.onPressSubmit.bind(this)
+  }
   static navigationOptions = {
     title: 'app.json',
   };
@@ -9,6 +19,33 @@ export default class SettingsScreen extends React.Component {
   render() {
     /* Go ahead and delete ExpoConfigView and replace it with your
      * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+      <View style={{padding: 10}}>
+        <TextInput
+          style={{height: 40}}
+          placeholder="Enter Username"
+          onChangeText={(user) => this.setState({username: user})}
+        />
+        <TextInput
+          style={{height: 40}}
+          placeholder="Enter Password"
+          onChangeText={(pass) => this.setState({password: pass})}
+        />
+        <Button
+          onPress={this.onPressSubmit}
+          title="Sign Up"
+          color="#841584"
+          />
+      </View>
+    )
+  }
+async onPressSubmit() {
+  try {
+    const {data} = await axios.post(`${ngrok_address}/auth/signup`, this.state)
+  }
+  catch(err) {
+    console.log(err)
   }
 }
+}
+
