@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { AppRegistry, Text, TextInput, View, Button } from 'react-native';
 import axios from 'axios'
 import {ngrok_address} from '../secrets'
+import { connect } from 'react-redux'
+import {postUserThunk} from '../Store/reducer'
 
 class DisconnectedSettingsScreen extends React.Component {
   constructor(props) {
@@ -25,12 +27,12 @@ class DisconnectedSettingsScreen extends React.Component {
         <TextInput
           style={{height: 40}}
           placeholder="Enter Username"
-          onChangeText={(username) => this.setState({username})}
+          onChangeText={(user) => this.setState({username: user})}
         />
         <TextInput
           style={{height: 40}}
           placeholder="Enter Password"
-          onChangeText={(password) => this.setState({password})}
+          onChangeText={(pass) => this.setState({password: pass})}
         />
         <Button
           onPress={this.onPressSubmit}
@@ -40,21 +42,23 @@ class DisconnectedSettingsScreen extends React.Component {
       </View>
     )
   }
-  async onPressSubmit() {
-    console.log(this.state)
-    try {
-      await axios.post(`${ngrok_address}/auth/signup`, this.state)
-    }
-    catch(err) {
-      console.log(err)
-    }
-    
+async onPressSubmit() {
+  try {
+    const {data} = await axios.post(`${ngrok_address}/auth/signup`, this.state)
+    postUserThunk(data)
   }
+  catch(err) {
+    console.log(err)
+  }
+}
 }
 
 
 const mapStateToProps = (state) => {
+  
+
   return ({user: state.user})
 }
+
 
 export default connect(mapStateToProps)(DisconnectedSettingsScreen)

@@ -23,7 +23,7 @@ class DisconnectedHomeScreen extends React.Component {
   };
 
   render() {
-    console.log('home', this.props)
+    console.log('home', this.props.user.password)
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
