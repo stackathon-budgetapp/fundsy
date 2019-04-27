@@ -12,9 +12,8 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-import { connect } from 'react-redux'
 
-class DisconnectedHomeScreen extends React.Component {
+export default class HomeScreen extends React.Component {
   constructor(props) {
     super()
   }
@@ -23,7 +22,6 @@ class DisconnectedHomeScreen extends React.Component {
   };
 
   render() {
-    console.log('home', this.props.user.password)
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -104,11 +102,6 @@ class DisconnectedHomeScreen extends React.Component {
   };
 }
 
-const mapStateToProps = (state) => {
-  return ({user: state.user})
-}
-
-export default connect(mapStateToProps)(DisconnectedHomeScreen)
 
 
 const styles = StyleSheet.create({

@@ -2,10 +2,8 @@ import React, {Component} from 'react';
 import { AppRegistry, Text, TextInput, View, Button } from 'react-native';
 import axios from 'axios'
 import {ngrok_address} from '../secrets'
-import { connect } from 'react-redux'
-import {postUserThunk} from '../Store/reducer'
 
-class DisconnectedSettingsScreen extends React.Component {
+export default class SettingsScreen extends React.Component {
   constructor(props) {
     super()
     this.state = {
@@ -19,7 +17,6 @@ class DisconnectedSettingsScreen extends React.Component {
   };
 
   render() {
-    console.log('settings', this.props)
     /* Go ahead and delete ExpoConfigView and replace it with your
      * content, we just wanted to give you a quick view of your config */
     return (
@@ -45,7 +42,6 @@ class DisconnectedSettingsScreen extends React.Component {
 async onPressSubmit() {
   try {
     const {data} = await axios.post(`${ngrok_address}/auth/signup`, this.state)
-    postUserThunk(data)
   }
   catch(err) {
     console.log(err)
@@ -53,12 +49,3 @@ async onPressSubmit() {
 }
 }
 
-
-const mapStateToProps = (state) => {
-  
-
-  return ({user: state.user})
-}
-
-
-export default connect(mapStateToProps)(DisconnectedSettingsScreen)

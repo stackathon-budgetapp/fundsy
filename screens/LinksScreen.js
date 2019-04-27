@@ -4,9 +4,8 @@ import { ExpoLinksView } from '@expo/samples';
 import PlaidAuthenticator from 'react-native-plaid-link';
 import axios from 'axios'
 import {ngrok_address} from '../secrets'
-import { connect } from 'react-redux'
 
-class DisconnectedLinksScreen extends React.Component {
+export default class LinksScreen extends React.Component {
   constructor() {
     super() 
 
@@ -17,7 +16,6 @@ class DisconnectedLinksScreen extends React.Component {
   };
 
     render() {
-      console.log('link', this.props.user.password)
       return <PlaidAuthenticator
         onMessage={this.onMessage}
         publicKey="65546042f77b1fd26dea9589eeddf7"
@@ -36,9 +34,4 @@ class DisconnectedLinksScreen extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-  return ({user: state.user})
-}
-
-export default connect(mapStateToProps)(DisconnectedLinksScreen)
 
