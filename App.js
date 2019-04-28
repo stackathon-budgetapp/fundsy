@@ -2,12 +2,22 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-
+import UserContext from './context'
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
+  constructor() {
+    super() 
+
+    this.state = {
+      userId: 0,
+      signUpNewUser: this.signUp,
+      isLoadingComplete: false
+    }
+  }
+
+  signUp = (user) =>  {
+    this.setState({userId: user.id})
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -22,7 +32,10 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-           <AppNavigator />
+          <UserContext.Provider value={this.state}>
+          {/* value={{userId: this.state.userId, signUpNewUser: this.state.signUpNewUser} */}
+            <AppNavigator />
+          </UserContext.Provider>  
         </View>
       );
     }
