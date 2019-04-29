@@ -37,14 +37,10 @@ export default class SettingsScreen extends React.Component {
 
   render() {
     return (
-      <UserContext.Consumer>
-          {
-            (user) => (
-              <View style={styles.container}>
               <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <View style={styles.welcomeContainer}>
                   <FlatList
-                        data={this.state.allTransactions}
+                        data={['transaction1', 'transaction2', 'transaction3']}
                         renderItem={({item}) => <Button
                         onPress={() => {
                           Alert.alert('You tapped the button!');
@@ -55,10 +51,7 @@ export default class SettingsScreen extends React.Component {
                   <Text>{`CURRENT USERID: ${user.userId}`}</Text>
                 </View>
               </ScrollView>
-            </View>
-            )
-          }
-      </UserContext.Consumer>
+           
   
     );
   }
