@@ -7,29 +7,45 @@ import {
   Text,
   TouchableOpacity,
   View,
+  AsyncStorage,
+  Button,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-import UserContext from '../context'
+// import UserContext from '../context'
 
 
 export default class SettingsScreen extends React.Component {
   constructor(props) {
     super()
+
+    this.state = {
+      userId: ''
+    }
   }
   static navigationOptions = {
     header: null,
   };
 
+  componentDidMount() {
+    console.log('SETTINGS SCREEN MOUNTED!')
+  }
+  getUserData = async () => {
+    console.log('TRIGGERED GETUSERDATA!')
+    const uId = await AsyncStorage.getItem('userId')
+    console.log('UID IS:', uId)
+    this.setState({userId: uId})
+  }
+
   render() {
+    console.log('SETTINGS SCREEN RENDERING!')
     return (
-      <UserContext.Consumer>
-          {
-            (user) => (
               <View style={styles.container}>
               <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+              <Button title="CLICK ON ME TO GET USERID" onPress={this.getUserData}></Button>
+                  <Text>{`HERE IS THE USER ID! ${this.state.userId}`}</Text>
                 <View style={styles.welcomeContainer}>
                   <Image
                     source={
@@ -39,7 +55,7 @@ export default class SettingsScreen extends React.Component {
                     }
                     style={styles.welcomeImage}
                   />
-                  <Text>{`CURRENT USERID: ${user.userId}`}</Text>
+                 
                 </View>
       
                 <View style={styles.getStartedContainer}>
@@ -71,9 +87,6 @@ export default class SettingsScreen extends React.Component {
                 </View>
               </View>
             </View>
-            )
-          }
-      </UserContext.Consumer>
   
     );
   }
