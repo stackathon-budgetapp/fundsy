@@ -10,7 +10,6 @@ export default class App extends React.Component {
 
     this.state = {
       userId: 0,
-      signUpNewUser: this.signUp,
       isLoadingComplete: false
     }
   }
@@ -19,7 +18,12 @@ export default class App extends React.Component {
     this.setState({userId: user.id})
   }
 
+  signOut = () => {
+    this.setState({userId: 0})
+  }
+
   render() {
+    console.log('APP RERENDERED!')
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -32,8 +36,9 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <UserContext.Provider value={this.state}>
-          {/* value={{userId: this.state.userId, signUpNewUser: this.state.signUpNewUser} */}
+          <UserContext.Provider value={{userId: this.state.userId, 
+                                        signUpNewUser: this.signUp,
+                                        signOutUser: this.signOut}}>
             <AppNavigator />
           </UserContext.Provider>  
         </View>

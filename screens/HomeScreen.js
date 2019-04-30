@@ -1,75 +1,64 @@
 import React from 'react';
-import { AppRegistry, Keyboard, ScrollView, Text, TextInput, View, Button } from 'react-native';
+import { AppRegistry, Keyboard, ScrollView, Text, TextInput, View, Button, AsyncStorage } from 'react-native';
 import axios from 'axios'
 import {ngrok_address} from '../secrets'
-import UserContext from '../context'
+import SignUp from '../components/SignUp'
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: '',
-      password: ''
+     signedIn: false,
+     userId: ''
     }
+
   }
   static navigationOptions = {
     title: 'app.json',
   };
 
-  render() {
-    return (
-      <UserContext.Consumer>
-        {
-          (user) => (
-              !user.userId ? 
-              <ScrollView style={{padding: 10}}>
-              <Text>{`CURRENT USERID: ${user.userId}`}</Text>
-              <TextInput keyboardType='default'
-                style={{height: 40}}
-                placeholder="Enter Username"
-                onChangeText={(user) => this.setState({username: user})}
-                value={this.state.username}
-              />
-              <TextInput keyboardType='default'
-                style={{height: 40}}
-                placeholder="Enter Password"
-                onChangeText={(pass) => this.setState({password: pass})}
-                value={this.state.password}
-              /> 
-              <Button
-                onPress={async () => {
-                  Keyboard.dismiss()
-                  const newUser = await this.createUser()
-                  user.signUpNewUser(newUser)
-                  this.setState({
-                    username: '',
-                    password: ''
-                  })
-                }}
-                title="Sign Up"
-                color="#841584"
-                />
-            </ScrollView> : 
-            
-            <View>
-              <Text>TRANSACTION DATA</Text>
-            </View>
-            
-            
-          )
-        }
-      </UserContext.Consumer>
-      
-    )
+  async componentDidMount() {
+    try {
+      const userId = await AsyncStorage.getItem('userId')
+      if (!userId) {
+        console.log('STATE OF HOMESCREEN DOES NOT HAVE USER ON IT!')
+        return ({signedIn: false, userId: ''})
+      } else { 
+        console.log('WE HAVE A USER LOGGED IN!')
+        console.log('userId should be: ', userId)
+        return ({signedIn: true, userId: userId})
+      }
+    } catch (err){
+      console.log('err in state!', err)
+    }
+  }
+  signOut = async() => {
+    await AsyncStorage.removeItem('userId')
+    this.setState({signedIn: false, userId: ''})
+    console.log('USER IS NOW LOGGED OUT!')
   }
 
-  createUser = async () => {
-    try {
-      const {data} = await axios.post(`${ngrok_address}/auth/signup`, this.state)
-      return data
-    } catch (err) {
-      console.log(err)
-    }
+  signIn = async () => {
+    console.log('SIGNING IN USER!')
+    const user = await AsyncStorage.getItem('userId')
+    console.log('logged in user here!: ', user)
+    this.setState({signedIn: true, userId: user})
+    
+  }
+
+  render() {
+    console.log('HOME SCREEN RENDERING!')
+    const {signedIn, userId} = this.state
+    return (
+      signedIn ? 
+        <View>
+          <Text>{`USER LOGGED IN RIGHT NOW: USER ${userId}`}</Text>
+          <Button title="Sign Out"
+                  onPress={this.signOut}
+          ></Button>
+        </View> :
+        <SignUp signIn={this.signIn}/>
+    )
   }
 }
 

@@ -7,73 +7,52 @@ import {
   Text,
   TouchableOpacity,
   View,
+  AsyncStorage,
+  Button,
+  FlatList
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
+import axios from 'axios'
 import { MonoText } from '../components/StyledText';
-
-import UserContext from '../context'
-
+import {ngrok_address} from '../secrets'
 
 export default class SettingsScreen extends React.Component {
   constructor(props) {
     super()
+
+    this.state = {
+      userId: '', 
+      transactions: {}
+    }
   }
   static navigationOptions = {
     header: null,
   };
 
+  async componentDidMount() {
+    const {data} = await axios.get(`${ngrok_address}/plaid/transactions`)
+    this.setState({transactions: data})
+    console.log('transactions on state!', this.state.transactions.transactions.transactions)
+  }
+  getUserData = async () => {
+    console.log('TRIGGERED GETUSERDATA!')
+    const uId = await AsyncStorage.getItem('userId')
+    console.log('UID IS:', uId)
+    this.setState({userId: uId})
+  }
+
   render() {
+    console.log('SETTINGS SCREEN RENDERING!')
     return (
-      <UserContext.Consumer>
-          {
-            (user) => (
               <View style={styles.container}>
+              {this.state.transactions.transactions && this.state.transactions.transactions.transactions ? 
               <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-                <View style={styles.welcomeContainer}>
-                  <Image
-                    source={
-                      __DEV__
-                        ? require('../assets/images/robot-dev.png')
-                        : require('../assets/images/robot-prod.png')
-                    }
-                    style={styles.welcomeImage}
-                  />
-                  <Text>{`CURRENT USERID: ${user.userId}`}</Text>
-                </View>
-      
-                <View style={styles.getStartedContainer}>
-                  {this._maybeRenderDevelopmentModeWarning()}
-      
-                  <Text style={styles.getStartedText}>Get started by opening</Text>
-      
-                  <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-                    <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-                  </View>
-      
-                  <Text style={styles.getStartedText}>
-                    Change this text and your app will automatically reload.
-                  </Text>
-                </View>
-      
-                <View style={styles.helpContainer}>
-                  <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-                    <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-                  </TouchableOpacity>
-                </View>
+                   <FlatList data={this.state.transactions.transactions.transactions}
+                    renderItem={({item})=> <Button title={`${item.name}, $${item.amount}`}/>}/>
+                
               </ScrollView>
-      
-              <View style={styles.tabBarInfoContainer}>
-                <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-      
-                <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-                  <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-                </View>
-              </View>
+              : <View></View>}
             </View>
-            )
-          }
-      </UserContext.Consumer>
   
     );
   }

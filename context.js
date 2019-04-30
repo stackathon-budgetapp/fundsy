@@ -2,7 +2,8 @@ import React from 'react'
 
 export const loggedInUser = {
     userId: 0,
-    signUpNewUser: () => {}
+    // signUpNewUser: () => {},
+    // signOutUser: () => {}
 }
 
 const UserContext = React.createContext(loggedInUser)
