@@ -31,8 +31,9 @@ class LinksScreen extends React.Component {
             }
      
     onMessage = async (data) => {
+      const userId = await AsyncStorage.getItem('userId')
       if (data.action === "plaid_link-undefined::connected") {
-        await axios.post(`${ngrok_address}/plaid/get_access_token`, {public_token: data.metadata.public_token})
+        await axios.post(`${ngrok_address}/plaid/get_access_token`, {public_token: data.metadata.public_token, userId: userId})
       }
       this.setState({data})
     }
