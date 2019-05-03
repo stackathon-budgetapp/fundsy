@@ -14,9 +14,9 @@ const Account = db.define('account', {
     },
     lastUpdate: {
         type: Sequelize.DATEONLY,
-        get: function() {
-            return moment.utc(this.getDataValue('regDate').format('YYYY-MM-DD'))
-        }
+        // get: function() {
+        //     return moment.utc(this.getDataValue('regDate').format('YYYY-MM-DD'))
+        // }
     }
 })
 

@@ -38,9 +38,10 @@ router.post('/get_access_token', async function(request, response, next) {
             where: {
                 id: request.body.userId}
         })
-        console.log('user!', user)
-        // await user.setAccount(newAcct) - did not work, still null
-        newAcct.userId = request.body.userId
+        // console.log('user!', user)
+        // // await user.setAccount(newAcct) - did not work, still null
+        // newAcct.userId = request.body.userId
+        user.addAccount(newAcct)
         console.log('ACCESS TOKEN INSTANCE SHOULD HAVE BEEN ADDED TO DB!')
         response.json({accessToken: ACCESS_TOKEN});}
     catch(err){
